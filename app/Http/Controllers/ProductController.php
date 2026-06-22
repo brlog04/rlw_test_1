@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ProductController extends Controller
     public function index(): View
     {
         return view('products.index', [
-            'products' => Product::query()->latest()->paginate(12),
+            'products' => Product::query()->with('category')->latest()->paginate(12),
         ]);
     }
 
@@ -24,7 +25,9 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('products.create');
+        return view('products.create', [
+            'categories' => Category::query()->get(),
+        ]);
     }
 
     /**
@@ -36,6 +39,7 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ]);
 
         Product::create($validated);

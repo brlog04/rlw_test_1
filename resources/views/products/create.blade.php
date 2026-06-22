@@ -10,7 +10,8 @@
 
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700">Naziv</label>
-                <input id="name" name="name" type="text" value="{{ old('name') }}" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">
+                <input id="name" name="name" type="text" value="{{ old('name') }}" required
+                    class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">
                 @error('name')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -18,7 +19,8 @@
 
             <div>
                 <label for="description" class="block text-sm font-medium text-slate-700">Opis</label>
-                <textarea id="description" name="description" rows="4" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">{{ old('description') }}</textarea>
+                <textarea id="description" name="description" rows="4"
+                    class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -26,17 +28,36 @@
 
             <div>
                 <label for="price" class="block text-sm font-medium text-slate-700">Cena</label>
-                <input id="price" name="price" type="number" step="0.01" min="0" value="{{ old('price') }}" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">
+                <input id="price" name="price" type="number" step="0.01" min="0" value="{{ old('price') }}" required
+                    class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">
                 @error('price')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
+            <div>
+                <label for="category_id" class="block text-sm font-medium text-slate-700">Kategorija</label>
+                <select id="category_id" name="category_id" required
+                    class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none">
+                    <option value="">Izaberite kategoriju</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @selected((int) old('category_id') === $category->id)>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="flex items-center justify-end gap-3">
-                <a href="{{ route('products.index') }}" class="rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
+                <a href="{{ route('products.index') }}"
+                    class="rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
                     Nazad
                 </a>
-                <button type="submit" class="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+                <button type="submit"
+                    class="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
                     Sacuvaj
                 </button>
             </div>
