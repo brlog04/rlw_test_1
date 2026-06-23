@@ -13,10 +13,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = Product::query()->with('category');
+        if ($request->filled('category_id')){
+            $query->where('category_id', $request->integer('category_id'));
+        }
+
         return view('products.index', [
-            'products' => Product::query()->with('category')->latest()->paginate(12),
+            'products' => $query->latest()->paginate(12),
+            'categories' => Category::query()->get(),
+            'selectedCategory' => $request->integer('category_id'),
         ]);
     }
 
@@ -47,7 +54,24 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('status', 'Product uspesno dodat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function edit(Product $product): View{
+        return view('products.edit',[
+            'product' => $product,
+            'categories' => Category::query()->get(),
+        ]);
+    }
+
+    public function update(Request $request, Product $product): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+        ]);
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')->with('status', 'Product uspesno izmenjen.');
+    }
 }

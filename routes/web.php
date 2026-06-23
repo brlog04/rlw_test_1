@@ -16,7 +16,7 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/', fn () => redirect()->route('products.index'))->name('home');
-    Route::resource('products', ProductController::class)->only(['index', 'create', 'store']);
+    Route::resource('products', ProductController::class)->only(['index', 'create', 'store','edit','update','destroy']);
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
